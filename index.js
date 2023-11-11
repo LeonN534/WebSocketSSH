@@ -1,5 +1,8 @@
 const WebSocketServer = require('ws').Server;
 const net = require('net');
+const WebSocket = require('ws'); // Add this line
+
+// ...rest of your WebSocket server script
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -16,11 +19,11 @@ wss.on('connection', function(ws) {
       }
     });
 
-    sshClient.connect(22, 'your_ssh_server_ip', function() {
+    sshClient.connect(22, 'localhost', function() {
       ws.on('message', function(message) {
         try {
           if (sshClient.writable) {
-            sshClient.write('ls');
+            sshClient.write(message);
           }
         } catch (err) {
           console.error('Error writing to SSH:', err);
