@@ -2,12 +2,12 @@ const WebSocketServer = require('ws').Server;
 const net = require('net');
 const WebSocket = require('ws'); // Add this line
 
-// ...rest of your WebSocket server script
-
 const wss = new WebSocketServer({ port: 8080 });
 
 wss.on('connection', function(ws) {
   let sshClient = new net.Socket();
+
+  const sshPort = process.argv[2] || 22; // Default to 22 if no argument provided
 
   const connectSSH = () => {
     sshClient = new net.Socket();
@@ -19,7 +19,7 @@ wss.on('connection', function(ws) {
       }
     });
 
-    sshClient.connect(22, 'localhost', function() {
+    sshClient.connect(sshPort, 'localhost', function() {
       ws.on('message', function(message) {
         try {
           if (sshClient.writable) {
